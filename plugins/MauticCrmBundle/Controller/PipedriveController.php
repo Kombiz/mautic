@@ -33,6 +33,10 @@ class PipedriveController extends CommonController
     const COMPANY_UPDATE_EVENT = 'updated.organization';
     const COMPANY_DELETE_EVENT = 'deleted.organization';
 
+    const PIPELINE_ADD_EVENT    = 'added.pipeline';
+    const PIPELINE_UPDATE_EVENT = 'updated.pipeline';
+    const PIPELINE_DELETE_EVENT = 'deleted.pileline';
+
     const USER_ADD_EVENT    = 'added.user';
     const USER_UPDATE_EVENT = 'updated.user';
 
@@ -83,6 +87,18 @@ class PipedriveController extends CommonController
                     $companyImport = $this->getCompanyImport($pipedriveIntegration);
                     $companyImport->delete($params['previous']);
                     break;
+                case self::PIPELINE_ADD_EVENT:
+                    $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
+                    $pipelineImport->create($data);
+                    break;
+                case self::PIPELINE_UPDATE_EVENT:
+                    $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
+                    $pipelineImport->update($data);
+                    break;
+                case self::PIPELINE_DELETE_EVENT:
+                    $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
+                    $pipelineImport->delete($params['previous']);
+                    break;
                 case self::USER_ADD_EVENT:
                 case self::USER_UPDATE_EVENT:
                 $ownerImport = $this->getOwnerImport($pipedriveIntegration);
@@ -126,6 +142,14 @@ class PipedriveController extends CommonController
         $ownerImport->setIntegration($integration);
 
         return $ownerImport;
+    }
+
+    private function getPipelineImport($integration)
+    {
+        $pipelineImport = $this->get('mautic_integration.pipedrive.import.pipeline');
+        $pipelineImport->setIntegration($integration);
+
+        return $pipelineImport;
     }
 
     private function validCredential(Request $request, PipedriveIntegration $pipedriveIntegration)
