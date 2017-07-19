@@ -137,6 +137,12 @@ return [
                     'doctrine.orm.entity_manager',
                 ],
             ],
+            'mautic_integration.pipedrive.import.stage' => [
+                'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Import\StageImport',
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                ],
+            ],
             'mautic_integration.pipedrive.export.company' => [
                 'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Export\CompanyExport',
                 'arguments' => [

@@ -35,7 +35,11 @@ class PipedriveController extends CommonController
 
     const PIPELINE_ADD_EVENT    = 'added.pipeline';
     const PIPELINE_UPDATE_EVENT = 'updated.pipeline';
-    const PIPELINE_DELETE_EVENT = 'deleted.pileline';
+    const PIPELINE_DELETE_EVENT = 'deleted.pipeline';
+
+    const STAGE_ADD_EVENT    = 'added.stage';
+    const STAGE_UPDATE_EVENT = 'updated.stage';
+    const STAGE_DELETE_EVENT = 'deleted.stage';
 
     const USER_ADD_EVENT    = 'added.user';
     const USER_UPDATE_EVENT = 'updated.user';
@@ -99,6 +103,18 @@ class PipedriveController extends CommonController
                     $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
                     $pipelineImport->delete($params['previous']);
                     break;
+                case self::STAGE_ADD_EVENT:
+                    $stageImport = $this->getStageImport($pipedriveIntegration);
+                    $stageImport->create($data);
+                    break;
+                case self::STAGE_UPDATE_EVENT:
+                    $stageImport = $this->getStageImport($pipedriveIntegration);
+                    $stageImport->update($data);
+                    break;
+                case self::STAGE_DELETE_EVENT:
+                    $stageImport = $this->getStageImport($pipedriveIntegration);
+                    $stageImport->delete($params['previous']);
+                    break;
                 case self::USER_ADD_EVENT:
                 case self::USER_UPDATE_EVENT:
                 $ownerImport = $this->getOwnerImport($pipedriveIntegration);
@@ -150,6 +166,14 @@ class PipedriveController extends CommonController
         $pipelineImport->setIntegration($integration);
 
         return $pipelineImport;
+    }
+
+    private function getStageImport($integration)
+    {
+        $stageImport = $this->get('mautic_integration.pipedrive.import.stage');
+        $stageImport->setIntegration($integration);
+
+        return $stageImport;
     }
 
     private function validCredential(Request $request, PipedriveIntegration $pipedriveIntegration)
