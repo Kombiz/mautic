@@ -44,14 +44,14 @@ class PipelineImport extends AbstractImport
             switch($field) {
                 case 'name':
                     if ($value != $pipeline->getName()) {
-                        $pipeline->setName($name);
+                        $pipeline->setName($value);
                         $update = true;
 
                     }
                     break;
                 case 'active':
                     if ($value != $pipeline->getActive()) {
-                        $pipeline->setActive($active);
+                        $pipeline->setActive($value);
                         $update = true;
                     }
                     break;
