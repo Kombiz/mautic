@@ -60,6 +60,16 @@ return [
                     'mautic.lead.model.list',
                 ],
             ],
+            'mautic.integration.pipedrive.form_actions.subscriber' => [
+                'class' => 'MauticPlugin\MauticCrmBundle\EventListener\FormSubscriber',
+            ]
+        ],
+        'forms' => [
+            'mautic_integration.pipedrive.offer' => [
+                'class'     => 'MauticPlugin\MauticCrmBundle\Form\Type\PipedriveOfferType',
+                'arguments' => [ 'doctrine.orm.entity_manager'],
+                'alias'     => 'pipedrive_offer_action',
+            ]
         ],
         'integrations' => [
             'mautic.integration.hubspot' => [
@@ -145,6 +155,12 @@ return [
             ],
             'mautic_integration.pipedrive.import.stage' => [
                 'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Import\StageImport',
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                ],
+            ],
+            'mautic_integration.pipedrive.export.deal' => [
+                'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Export\DealExport',
                 'arguments' => [
                     'doctrine.orm.entity_manager',
                 ],
