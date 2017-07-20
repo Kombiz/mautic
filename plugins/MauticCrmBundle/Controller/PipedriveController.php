@@ -37,6 +37,10 @@ class PipedriveController extends CommonController
     const PIPELINE_UPDATE_EVENT = 'updated.pipeline';
     const PIPELINE_DELETE_EVENT = 'deleted.pipeline';
 
+    const PRODUCT_ADD_EVENT    = 'added.product';
+    const PRODUCT_UPDATE_EVENT = 'updated.product';
+    const PRODUCT_DELETE_EVENT = 'deleted.product';
+
     const STAGE_ADD_EVENT    = 'added.stage';
     const STAGE_UPDATE_EVENT = 'updated.stage';
     const STAGE_DELETE_EVENT = 'deleted.stage';
@@ -103,6 +107,18 @@ class PipedriveController extends CommonController
                     $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
                     $pipelineImport->delete($params['previous']);
                     break;
+                case self::PRODUCT_ADD_EVENT:
+                    $productImport = $this->getProductImport($pipedriveIntegration);
+                    $productImport->create($data);
+                    break;
+                case self::PRODUCT_UPDATE_EVENT:
+                    $productImport = $this->getProductImport($pipedriveIntegration);
+                    $productImport->update($data);
+                    break;
+                case self::PRODUCT_DELETE_EVENT:
+                    $productImport = $this->getProductImport($pipedriveIntegration);
+                    $productImport->delete($params['previous']);
+                    break;
                 case self::STAGE_ADD_EVENT:
                     $stageImport = $this->getStageImport($pipedriveIntegration);
                     $stageImport->create($data);
@@ -166,6 +182,14 @@ class PipedriveController extends CommonController
         $pipelineImport->setIntegration($integration);
 
         return $pipelineImport;
+    }
+
+    private function getProductImport($integration)
+    {
+        $productImport = $this->get('mautic_integration.pipedrive.import.product');
+        $productImport->setIntegration($integration);
+
+        return $productImport;
     }
 
     private function getStageImport($integration)

@@ -12,6 +12,7 @@ class PipedriveApi extends CrmApi
     const PERSONS_API_ENDPOINT       = 'persons';
     const USERS_API_ENDPOINT         = 'users';
     const PIPELINES_API_ENDPOINT     = 'pipelines';
+    const PRODUCTS_API_ENDPOINT      = 'products';
     const STAGES_API_ENDPOINT        = 'stages';
     /**
      * @var TransportInterface

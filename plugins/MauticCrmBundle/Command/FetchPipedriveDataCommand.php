@@ -51,6 +51,7 @@ class FetchPipedriveDataCommand extends ContainerAwareCommand
             $types = ['company' => PipedriveApi::ORGANIZATIONS_API_ENDPOINT] + $types;
             $types = ['pipeline' => PipedriveApi::PIPELINES_API_ENDPOINT] + $types;
             $types = ['stage'    => PipedriveApi::STAGES_API_ENDPOINT] + $types;
+            $types = ['product'  => PipedriveApi::PRODUCTS_API_ENDPOINT] + $types;
         }
 
         foreach ($types as $type => $endPoint) {
