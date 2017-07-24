@@ -2,6 +2,7 @@
 
 namespace  MauticPlugin\MauticCrmBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\LeadBundle\Entity\Lead;
@@ -33,6 +34,19 @@ class PipedriveDeal
      */
     private $stage;
 
+    /**
+     * @var ArrayCollection
+     */
+    private $dealProducts;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->dealProducts      = new ArrayCollection();
+    }
+
 
     /**
      * @param ORM\ClassMetadata $metadata
@@ -52,6 +66,10 @@ class PipedriveDeal
         $stage = $builder->createManyToOne('stage', 'MauticPlugin\MauticCrmBundle\Entity\PipedriveStage');
         $stage->addJoinColumn('stage_id', 'id', $nullable = false, $unique = false, $onDelete = 'CASCADE')
             ->build();
+
+        $dealProducts = $builder->createOneToMany('dealProducts', 'PipedriveDealProduct')
+                      ->mappedBy('deal')
+                      ->build();
     }
 
     /**
@@ -141,4 +159,40 @@ class PipedriveDeal
 
         return $this;
     }
+
+    /**
+     * Add dealProduct.
+     *
+     * @param PipedriveDealProduct $dealProduct
+     *
+     * @return PipedriveDeal
+     */
+    public function addDealProduct(PipedriveDealProduct $dealProduct)
+    {
+        $this->dealProducts[$dealProduct->getId()] = $dealProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove dealProduct.
+     *
+     * @param PipedriveDealProduct $dealProduct
+     */
+    public function removeDealProduct(PipedriveDealProduct $dealProduct)
+    {
+        $this->dealProducts->removeElement($dealProduct);
+    }
+
+    /**
+     * Get dealProducts.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDealProducts()
+    {
+        return $this->dealProducts;
+    }
+
+
 }

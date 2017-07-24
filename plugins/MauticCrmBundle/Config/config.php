@@ -135,6 +135,12 @@ return [
                     'doctrine.orm.entity_manager',
                 ],
             ],
+            'mautic_integration.pipedrive.import.deal' => [
+                'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Import\DealImport',
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                ],
+            ],
             'mautic_integration.pipedrive.import.lead' => [
                 'class'     => 'MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Import\LeadImport',
                 'arguments' => [

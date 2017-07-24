@@ -16,8 +16,6 @@ class DealExport extends AbstractPipedrive
         $leadId                = $lead->getId();
         $leadIntegrationEntity = $this->getLeadIntegrationEntity(['internalEntityId' => $leadId]);
 
-
-
         $params = [
             'title'     => $deal->getTitle(),
             'stage_id'  => $deal->getStage()->getStageId(),
@@ -25,7 +23,21 @@ class DealExport extends AbstractPipedrive
         ];
 
         try {
-            $this->getIntegration()->getApiHelper()->createDeal($params);
+            $response = $this->getIntegration()->getApiHelper()->createDeal($params);
+            $dealProducts = $deal->getDealProducts();
+
+            if (!empty($dealProducts)) {
+                $dealProduct = $dealProducts[0];
+                $productParams = [
+                    'id'          => $response['id'],
+                    'product_id'  => $dealProduct->getProduct()->getProductId(),
+                    'item_price'  => $dealProduct->getItemPrice(),
+                    'quantity'    => $dealProduct->getQuantity(),
+                ];
+
+                $this->getIntegration()->getApiHelper()->createDealProduct($productParams);
+            }
+
 
             return true;
         }

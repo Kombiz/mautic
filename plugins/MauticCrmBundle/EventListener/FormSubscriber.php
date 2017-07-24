@@ -44,7 +44,6 @@ class FormSubscriber extends CommonSubscriber
             'label'             => 'mautic.pipedrive.actions.push_offer',
             'description'       => 'mautic.pipedrive.actions.tooltip',
             'formType'          => 'pipedrive_offer_action',
-            //'formTheme'   => 'MauticPluginBundle:FormTheme\Integration',
             'callback'          => ['\\MauticPlugin\\MauticCrmBundle\\Helper\\EventHelper', 'pushOffer'],
             //            'allowCampaignForm' => true,
         ];

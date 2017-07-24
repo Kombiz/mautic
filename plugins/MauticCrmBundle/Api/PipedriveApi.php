@@ -15,6 +15,7 @@ class PipedriveApi extends CrmApi
     const PRODUCTS_API_ENDPOINT      = 'products';
     const STAGES_API_ENDPOINT        = 'stages';
     const DEALS_API_ENDPOINT         = 'deals';
+    const DEAL_PRODUCT_API_ENDPOINT  = 'deals/%s/products';
     /**
      * @var TransportInterface
      */
@@ -46,6 +47,23 @@ class PipedriveApi extends CrmApi
 
         return $this->getResponseData($response);
     }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function createDealProduct(array $data = [])
+    {
+        $params      = $this->getRequestParameters($data);
+        $apiEndPoint = sprintf(self::DEAL_PRODUCT_API_ENDPOINT, $data['id']);
+        $url      = sprintf('%s/%s', $this->integration->getApiUrl(), $apiEndPoint);
+        $response = $this->transport->post($url, $params);
+
+        return $this->getResponseData($response);
+    }
+
+
 
     /**
      * @param array $data

@@ -12,6 +12,7 @@
 namespace MauticPlugin\MauticCrmBundle\Form\Type;
 
 use Doctrine\ORM\EntityManager;
+use MauticPlugin\MauticCrmBundle\Entity\PipedriveProduct;
 use MauticPlugin\MauticCrmBundle\Entity\PipedriveStage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,31 +41,26 @@ class PipedriveOfferType extends AbstractType
             ->addOrderBy('st.order', 'ASC')
             ->getQuery()
             ->getResult();
-        // $products = $this->em->getRepository(PipedriveProduct::class)->findBy([], ['name' => 'ASC']);
+        $products = $this->em->getRepository(PipedriveProduct::class)->findBy([], ['name' => 'ASC']);
 
         $stageChoices = [];
         foreach ($stages as $stage) {
             $stageChoices[$stage->getPipeline()->getName()][$stage->getId()] =  $stage->getName();
         }
 
-        // $productChoices = [];
-        // foreach ($products as $product) {
-        //     $productChoices[$product->getId()] = $product->getId();
-        // }
-
-        // $builder->add('product', 'choice', [
-        //     'label'   => 'mautic.pipedrive.stage.label',
-        //     'choices' => $productChoices,
-        // ]);
+        $productChoices = [];
+        foreach ($products as $product) {
+            $productChoices[$product->getId()] = $product->getName();
+        }
 
         $builder->add(
             'title',
             'text',
             [
                 'label' => 'mautic.pipedrive.offer_name.label',
-                //'data'  => (isset($data['offer_name'])) ? $data['offer_name'] : '',
                 'attr'  => [
                     'tooltip' => 'mautic.pipedrive.offer_name.tooltip',
+                    'class' => 'form-control'
                 ],
             ]
         );
@@ -72,6 +68,30 @@ class PipedriveOfferType extends AbstractType
             'label'   => 'mautic.pipedrive.stage.label',
             'choices' => $stageChoices,
         ]);
+
+        $builder->add('product', 'choice', [
+            'label'   => 'mautic.pipedrive.product.label',
+            'choices' => $productChoices,
+        ]);
+
+        $builder->add(
+            'product_price',
+            'integer',
+            [
+                'label' => 'mautic.pipedrive.offer_product_price',
+                'attr'  => [ 'class' => 'form-control']
+            ]
+        );
+        $builder->add(
+            'product_comment',
+            'textarea',
+            [
+                'label' => 'mautic.pipedrive.offer_product_comment',
+                'attr'  => [ 'class' => 'form-control']
+            ]
+        );
+
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

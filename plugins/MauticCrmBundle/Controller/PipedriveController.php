@@ -33,6 +33,10 @@ class PipedriveController extends CommonController
     const COMPANY_UPDATE_EVENT = 'updated.organization';
     const COMPANY_DELETE_EVENT = 'deleted.organization';
 
+    const DEAL_ADD_EVENT    = 'added.deal';
+    const DEAL_UPDATE_EVENT = 'updated.deal';
+    const DEAL_DELETE_EVENT = 'deleted.deal';
+
     const PIPELINE_ADD_EVENT    = 'added.pipeline';
     const PIPELINE_UPDATE_EVENT = 'updated.pipeline';
     const PIPELINE_DELETE_EVENT = 'deleted.pipeline';
@@ -94,6 +98,18 @@ class PipedriveController extends CommonController
                 case self::COMPANY_DELETE_EVENT:
                     $companyImport = $this->getCompanyImport($pipedriveIntegration);
                     $companyImport->delete($params['previous']);
+                    break;
+                case self::DEAL_ADD_EVENT:
+                    $dealImport = $this->getDealImport($pipedriveIntegration);
+                    $dealImport->create($data);
+                    break;
+                case self::DEAL_UPDATE_EVENT:
+                    $dealImport = $this->getDealImport($pipedriveIntegration);
+                    $dealImport->update($data);
+                    break;
+                case self::DEAL_DELETE_EVENT:
+                    $dealImport = $this->getDealImport($pipedriveIntegration);
+                    $dealImport->delete($params['previous']);
                     break;
                 case self::PIPELINE_ADD_EVENT:
                     $pipelineImport = $this->getPipelineImport($pipedriveIntegration);
@@ -166,6 +182,14 @@ class PipedriveController extends CommonController
         $companyImport->setIntegration($integration);
 
         return $companyImport;
+    }
+
+    private function getDealImport($integration)
+    {
+        $dealImport = $this->get('mautic_integration.pipedrive.import.deal');
+        $dealImport->setIntegration($integration);
+
+        return $dealImport;
     }
 
     private function getOwnerImport($integration)
