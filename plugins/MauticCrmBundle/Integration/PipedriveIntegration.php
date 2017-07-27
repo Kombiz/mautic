@@ -224,49 +224,49 @@ class PipedriveIntegration extends CrmAbstractIntegration
                     'required'    => false,
                 ]
             );
-        } elseif ($formArea == 'integration') {
+        }//  elseif ($formArea == 'integration') {
 
-            $stages = $this->em->getRepository(PipedriveStage::class)
-                    ->createQueryBuilder('st')
-                    ->join('st.pipeline', 'p')
-                    ->addOrderBy('p.name', 'ASC')
-                    ->addOrderBy('st.order', 'ASC')
-                    ->getQuery()
-                    ->getResult();
+        //     $stages = $this->em->getRepository(PipedriveStage::class)
+        //             ->createQueryBuilder('st')
+        //             ->join('st.pipeline', 'p')
+        //             ->addOrderBy('p.name', 'ASC')
+        //             ->addOrderBy('st.order', 'ASC')
+        //             ->getQuery()
+        //             ->getResult();
 
-            $choices = [];
-            foreach ($stages as $stage) {
-                $choices[$stage->getPipeline()->getName()][$stage->getId()] =  $stage->getName();
-            }
+        //     $choices = [];
+        //     foreach ($stages as $stage) {
+        //         $choices[$stage->getPipeline()->getName()][$stage->getId()] =  $stage->getName();
+        //     }
 
-            $builder->add(
-                'test',
-                'yesno_button_group',
-                [
-                    'label' => 'mautic.pipedrive.test.label',
-                    'data'  => (isset($data['test'])) ? (bool) $data['test'] : false,
-                    'attr'  => [
-                        'tooltip' => 'mautic.pipedrive.test.tooltip',
-                    ],
-                ]
-            );
-            $builder->add(
-                'offerName',
-                'text',
-                [
-                    'label' => 'mautic.pipedrive.offer_name.label',
-                    //'data'  => (isset($data['offer_name'])) ? $data['offer_name'] : '',
-                    'attr'  => [
-                        'tooltip' => 'mautic.pipedrive.offer_name.tooltip',
-                    ],
-                ]
-            );
-            $builder->add('stage', 'choice', [
-                'label'   => 'mautic.pipedrive.stage.label',
-                'choices' => $choices
-            ]);
+        //     $builder->add(
+        //         'test',
+        //         'yesno_button_group',
+        //         [
+        //             'label' => 'mautic.pipedrive.test.label',
+        //             'data'  => (isset($data['test'])) ? (bool) $data['test'] : false,
+        //             'attr'  => [
+        //                 'tooltip' => 'mautic.pipedrive.test.tooltip',
+        //             ],
+        //         ]
+        //     );
+        //     $builder->add(
+        //         'offerName',
+        //         'text',
+        //         [
+        //             'label' => 'mautic.pipedrive.offer_name.label',
+        //             //'data'  => (isset($data['offer_name'])) ? $data['offer_name'] : '',
+        //             'attr'  => [
+        //                 'tooltip' => 'mautic.pipedrive.offer_name.tooltip',
+        //             ],
+        //         ]
+        //     );
+        //     $builder->add('stage', 'choice', [
+        //         'label'   => 'mautic.pipedrive.stage.label',
+        //         'choices' => $choices
+        //     ]);
 
-        }
+        // }
     }
 
     public function isCompanySupportEnabled()

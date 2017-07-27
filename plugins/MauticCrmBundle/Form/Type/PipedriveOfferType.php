@@ -59,7 +59,6 @@ class PipedriveOfferType extends AbstractType
             [
                 'label' => 'mautic.pipedrive.offer_name.label',
                 'attr'  => [
-                    'tooltip' => 'mautic.pipedrive.offer_name.tooltip',
                     'class' => 'form-control'
                 ],
             ]
@@ -72,6 +71,7 @@ class PipedriveOfferType extends AbstractType
         $builder->add('product', 'choice', [
             'label'   => 'mautic.pipedrive.product.label',
             'choices' => $productChoices,
+            'attr' => [ 'tooltip' => 'mautic.pipedrive.product.tooltip'],
         ]);
 
         $builder->add(
@@ -87,7 +87,8 @@ class PipedriveOfferType extends AbstractType
             'textarea',
             [
                 'label' => 'mautic.pipedrive.offer_product_comment',
-                'attr'  => [ 'class' => 'form-control']
+                'attr'  => [ 'class' => 'form-control', 'tooltip' => 'mautic.pipedrive.product_comment.tooltip'],
+                'required' => false,
             ]
         );
 
