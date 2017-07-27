@@ -214,6 +214,7 @@ class PipedriveIntegration extends CrmAbstractIntegration
                 [
                     'choices' => [
                         'company' => 'mautic.pipedrive.object.organization',
+                        'deal'    => 'mautic.pipedrive.object.deal',
                     ],
                     'expanded'    => true,
                     'multiple'    => true,
@@ -273,6 +274,13 @@ class PipedriveIntegration extends CrmAbstractIntegration
         $supportedFeatures = $this->getIntegrationSettings()->getFeatureSettings();
 
         return isset($supportedFeatures['objects']) && in_array('company', $supportedFeatures['objects']);
+    }
+
+    public function isDealSupportEnabled()
+    {
+        $supportedFeatures = $this->getIntegrationSettings()->getFeatureSettings();
+
+        return isset($supportedFeatures['objects']) && in_array('deal', $supportedFeatures['objects']);
     }
 
     public function pushLead($lead, $config = [])

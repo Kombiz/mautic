@@ -26,12 +26,9 @@ class ProductImport extends AbstractImport
 
     public function update(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $product = $this->em->getRepository(PipedriveProduct::class)->findOneByProductId($data['id']);
 
@@ -74,12 +71,9 @@ class ProductImport extends AbstractImport
 
     public function delete(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $product = $this->em->getRepository(PipedriveProduct::class)->findOneByProductId($data['id']);
 

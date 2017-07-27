@@ -26,12 +26,9 @@ class PipelineImport extends AbstractImport
 
     public function update(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $pipeline = $this->em->getRepository(PipedrivePipeline::class)->findOneByPipelineId($data['id']);
 
@@ -68,12 +65,9 @@ class PipelineImport extends AbstractImport
 
     public function delete(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $pipeline = $this->em->getRepository(PipedrivePipeline::class)->findOneByPipelineId($data['id']);
 

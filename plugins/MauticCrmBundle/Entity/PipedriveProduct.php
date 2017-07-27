@@ -100,7 +100,7 @@ class PipedriveProduct
     /**
      * @return boolean
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }
@@ -121,7 +121,7 @@ class PipedriveProduct
     /**
      * @return integer
      */
-    public function getSelectable()
+    public function isSelectable()
     {
         return $this->selectable;
     }

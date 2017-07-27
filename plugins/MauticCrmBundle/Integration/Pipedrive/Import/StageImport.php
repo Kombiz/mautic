@@ -4,6 +4,7 @@ namespace MauticPlugin\MauticCrmBundle\Integration\Pipedrive\Import;
 
 use MauticPlugin\MauticCrmBundle\Entity\PipedrivePipeline;
 use MauticPlugin\MauticCrmBundle\Entity\PipedriveStage;
+use Symfony\Component\HttpFoundation\Response;
 
 class StageImport extends AbstractImport
 {
@@ -33,12 +34,9 @@ class StageImport extends AbstractImport
 
     public function update(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $stage = $this->em->getRepository(PipedriveStage::class)->findOneByStageId($data['id']);
 
@@ -81,12 +79,9 @@ class StageImport extends AbstractImport
 
     public function delete(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $stage = $this->em->getRepository(PipedriveStage::class)->findOneByStageId($data['id']);
 

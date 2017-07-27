@@ -47,12 +47,10 @@ class DealImport extends AbstractImport
 
     public function update(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
+
         $deal = $this->em->getRepository(PipedriveDeal::class)->findOneByDealId($data['id']);
 
         if (!$deal) {
@@ -107,12 +105,9 @@ class DealImport extends AbstractImport
 
     public function delete(array $data = [])
     {
-        /**
-         * @todo
-         */
-        // if (!$this->getIntegration()->isPipelineSupportEnabled()) {
-        //     return; //feature disabled
-        // }
+        if (!$this->getIntegration()->isDealSupportEnabled()) {
+            return; //feature disabled
+        }
 
         $deal = $this->em->getRepository(PipedriveDeal::class)->findOneByDealId($data['id']);
 
