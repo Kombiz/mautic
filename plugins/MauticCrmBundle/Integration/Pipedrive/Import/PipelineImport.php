@@ -47,7 +47,7 @@ class PipelineImport extends AbstractImport
                     }
                     break;
                 case 'active':
-                    if ($value != $pipeline->getActive()) {
+                    if ($value != $pipeline->isActive()) {
                         $pipeline->setActive($value);
                         $update = true;
                     }

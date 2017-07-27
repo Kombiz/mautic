@@ -25,7 +25,7 @@ class PipedriveStage
     /**
      * @var boolean
      */
-    private $active;
+    private $active = true;
 
     /**
      * @var integer

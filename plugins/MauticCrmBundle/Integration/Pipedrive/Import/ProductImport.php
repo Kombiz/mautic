@@ -47,7 +47,7 @@ class ProductImport extends AbstractImport
                     }
                     break;
                 case 'active':
-                    if ($value != $product->getActive()) {
+                    if ($value != $product->isActive()) {
                         $product->setActive($value);
                         $update = true;
                     }

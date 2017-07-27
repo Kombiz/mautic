@@ -55,7 +55,7 @@ class StageImport extends AbstractImport
                     }
                     break;
                 case 'active':
-                    if ($value != $stage->getActive()) {
+                    if ($value != $stage->isActive()) {
                         $stage->setActive($value);
                         $update = true;
                     }
