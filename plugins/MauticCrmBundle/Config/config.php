@@ -60,17 +60,21 @@ return [
                     'mautic.lead.model.list',
                 ],
             ],
-            'mautic.integration.pipedrive.form_actions.subscriber' => [
-                'class' => 'MauticPlugin\MauticCrmBundle\EventListener\FormSubscriber',
-            ]
+            'mautic.integration.lead_content_subscriber' => [
+                'class' => 'MauticPlugin\MauticCrmBundle\EventListener\CustomContentSubscriber',
+                'arguments' => [ 'doctrine.orm.default_entity_manager', 'mautic.helper.integration' ]
+            ],
+            // 'mautic.integration.pipedrive.form_actions.subscriber' => [
+            //     'class' => 'MauticPlugin\MauticCrmBundle\EventListener\PipedriveActionSubscriber',
+            // ]
         ],
-        'forms' => [
-            'mautic_integration.pipedrive.offer' => [
-                'class'     => 'MauticPlugin\MauticCrmBundle\Form\Type\PipedriveOfferType',
-                'arguments' => [ 'doctrine.orm.entity_manager'],
-                'alias'     => 'pipedrive_offer_action',
-            ]
-        ],
+        // 'forms' => [
+        //     'mautic_integration.pipedrive.offer' => [
+        //         'class'     => 'MauticPlugin\MauticCrmBundle\Form\Type\PipedriveOfferType',
+        //         'arguments' => [ 'doctrine.orm.entity_manager'],
+        //         'alias'     => 'pipedrive_offer_action',
+        //     ]
+        // ],
         'integrations' => [
             'mautic.integration.hubspot' => [
                 'class'     => \MauticPlugin\MauticCrmBundle\Integration\HubspotIntegration::class,

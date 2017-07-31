@@ -4,6 +4,7 @@ namespace MauticPlugin\MauticCrmBundle\Integration;
 
 use Mautic\LeadBundle\Entity\Lead;
 use MauticPlugin\MauticCrmBundle\Entity\PipedrivePipeline;
+use MauticPlugin\MauticCrmBundle\Entity\PipedriveProduct;
 use MauticPlugin\MauticCrmBundle\Entity\PipedriveStage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -224,49 +225,106 @@ class PipedriveIntegration extends CrmAbstractIntegration
                     'required'    => false,
                 ]
             );
-        }//  elseif ($formArea == 'integration') {
+        } elseif ($formArea == 'integration') {
 
-        //     $stages = $this->em->getRepository(PipedriveStage::class)
-        //             ->createQueryBuilder('st')
-        //             ->join('st.pipeline', 'p')
-        //             ->addOrderBy('p.name', 'ASC')
-        //             ->addOrderBy('st.order', 'ASC')
-        //             ->getQuery()
-        //             ->getResult();
+            $formName = 'formaction_properties_config';
+            $dontPushDeal = '{"'. $formName . '_push_deal_0": "checked"}';
+            $pushDeal = '{"'. $formName . '_push_deal_1": "checked"}';
+            $noProductChosen = '{"'. $formName . '_product": ""}';
 
-        //     $choices = [];
-        //     foreach ($stages as $stage) {
-        //         $choices[$stage->getPipeline()->getName()][$stage->getId()] =  $stage->getName();
-        //     }
+            if ($this->isDealSupportEnabled()) {
+                $builder->add(
+                    'push_deal',
+                    'yesno_button_group',
+                    [
+                        'label' => 'mautic.pipedrive.push_deal.question',
+                        'data'  => (isset($data['push_deal'])) ? (bool) $data['push_deal'] : false,
+                        'attr'  => [
+                            'tooltip' => 'mautic.pipedrive.push_deal.tooltip',
+                        ],
+                    ]
+                );
 
-        //     $builder->add(
-        //         'test',
-        //         'yesno_button_group',
-        //         [
-        //             'label' => 'mautic.pipedrive.test.label',
-        //             'data'  => (isset($data['test'])) ? (bool) $data['test'] : false,
-        //             'attr'  => [
-        //                 'tooltip' => 'mautic.pipedrive.test.tooltip',
-        //             ],
-        //         ]
-        //     );
-        //     $builder->add(
-        //         'offerName',
-        //         'text',
-        //         [
-        //             'label' => 'mautic.pipedrive.offer_name.label',
-        //             //'data'  => (isset($data['offer_name'])) ? $data['offer_name'] : '',
-        //             'attr'  => [
-        //                 'tooltip' => 'mautic.pipedrive.offer_name.tooltip',
-        //             ],
-        //         ]
-        //     );
-        //     $builder->add('stage', 'choice', [
-        //         'label'   => 'mautic.pipedrive.stage.label',
-        //         'choices' => $choices
-        //     ]);
+                $stages = $this->em->getRepository(PipedriveStage::class)
+                    ->createQueryBuilder('st')
+                    ->join('st.pipeline', 'p')
+                    ->addOrderBy('p.name', 'ASC')
+                    ->addOrderBy('st.order', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+                $products = $this->em->getRepository(PipedriveProduct::class)->findBy([], ['name' => 'ASC']);
 
-        // }
+                $stageChoices = [];
+                foreach ($stages as $stage) {
+                    $stageChoices[$stage->getPipeline()->getName()][$stage->getId()] =  $stage->getName();
+                }
+
+                $productChoices = [];
+                foreach ($products as $product) {
+                    $productChoices[$product->getId()] = $product->getName();
+                }
+
+                $builder->add(
+                    'title',
+                    'text',
+                    [
+                        'label' => 'mautic.pipedrive.offer_name.label',
+                        'attr'  => [
+                            'class' => 'form-control',
+                            'data-show-on' => $pushDeal,
+                            'data-hide-on' => $dontPushDeal,
+                        ],
+                        'required' => true,
+                    ]
+                );
+                $builder->add('stage', 'choice', [
+                    'label'   => 'mautic.pipedrive.stage.label',
+                    'choices' => $stageChoices,
+                    'attr' => [
+                        'data-show-on' => $pushDeal,
+                    ],
+                ]);
+
+                $builder->add('product', 'choice', [
+                    'label'   => 'mautic.pipedrive.product.label',
+                    'choices' => $productChoices,
+                    'placeholder' => 'mautic.pipedrive.product.placeholder',
+                    'attr' => [
+                        'tooltip' => 'mautic.pipedrive.product.tooltip',
+                        'data-show-on' => $pushDeal,
+                    ],
+                ]);
+
+                $builder->add(
+                    'product_price',
+                    'number',
+                    [
+                        'label' => 'mautic.pipedrive.offer_product_price',
+                        'attr'  => [
+                            'class' => 'form-control',
+                            'data-hide-on' => $noProductChosen,
+                            'data-show-on' => $pushDeal,
+                        ],
+                        'data'  => (isset($data['product_price']))? $data['product_price'] : 0,
+                        'required' => false,
+                    ]
+                );
+                $builder->add(
+                    'product_comment',
+                    'textarea',
+                    [
+                        'label' => 'mautic.pipedrive.offer_product_comment',
+                        'attr'  => [
+                            'class'        => 'form-control',
+                            'tooltip'      => 'mautic.pipedrive.product_comment.tooltip',
+                            'data-hide-on' => $noProductChosen,
+                            'data-show-on' => $pushDeal,
+                        ],
+                        'required' => false,
+                    ]
+                );
+            }
+        }
     }
 
     public function isCompanySupportEnabled()
@@ -288,7 +346,14 @@ class PipedriveIntegration extends CrmAbstractIntegration
         $leadExport = $this->factory->get('mautic_integration.pipedrive.export.lead');
         $leadExport->setIntegration($this);
 
-        return $leadExport->create($lead);
+        if ($this->isDealSupportEnabled()) {
+            $dealExport = $this->factory->get('mautic_integration.pipedrive.export.deal');
+            $dealExport->setIntegration($this);
+
+            return $leadExport->createWithDeal($lead, $config['config'], $dealExport);
+        } else {
+            return $leadExport->create($lead);
+        }
     }
 
     /**
