@@ -227,8 +227,18 @@ class PipedriveIntegration extends CrmAbstractIntegration
             );
         } elseif ($formArea == 'integration') {
 
+            /**
+             * formname can take several values like formaction or campaignevent
+             * which makes it impossible to hardcode a value like below.
+             *
+             * Moreover, even if it could be done, there is an issue with the
+             * first time the form is loaded as the expression for the pushDeal
+             * is not evaluated at that moment. After a click on it, it works as
+             * expected.
+             */
+
             $formName = 'formaction_properties_config';
-            $dontPushDeal = '{"'. $formName . '_push_deal_0": "checked"}';
+            //            $dontPushDeal = '{"'. $formName . '_push_deal_0": "checked"}'; // does that even work ?
             $pushDeal = '{"'. $formName . '_push_deal_1": "checked"}';
             $noProductChosen = '{"'. $formName . '_product": ""}';
 
@@ -271,8 +281,7 @@ class PipedriveIntegration extends CrmAbstractIntegration
                         'label' => 'mautic.pipedrive.offer_name.label',
                         'attr'  => [
                             'class' => 'form-control',
-                            'data-show-on' => $pushDeal,
-                            'data-hide-on' => $dontPushDeal,
+                            //'data-show-on' => $pushDeal,
                         ],
                         'required' => true,
                     ]
@@ -281,7 +290,7 @@ class PipedriveIntegration extends CrmAbstractIntegration
                     'label'   => 'mautic.pipedrive.stage.label',
                     'choices' => $stageChoices,
                     'attr' => [
-                        'data-show-on' => $pushDeal,
+                        //'data-show-on' => $pushDeal,
                     ],
                 ]);
 
@@ -302,8 +311,8 @@ class PipedriveIntegration extends CrmAbstractIntegration
                         'label' => 'mautic.pipedrive.offer_product_price',
                         'attr'  => [
                             'class' => 'form-control',
-                            'data-hide-on' => $noProductChosen,
-                            'data-show-on' => $pushDeal,
+                            // 'data-hide-on' => $noProductChosen,
+                            // 'data-show-on' => $pushDeal,
                         ],
                         'data'  => (isset($data['product_price']))? $data['product_price'] : 0,
                         'required' => false,
@@ -317,8 +326,8 @@ class PipedriveIntegration extends CrmAbstractIntegration
                         'attr'  => [
                             'class'        => 'form-control',
                             'tooltip'      => 'mautic.pipedrive.product_comment.tooltip',
-                            'data-hide-on' => $noProductChosen,
-                            'data-show-on' => $pushDeal,
+                            // 'data-hide-on' => $noProductChosen,
+                            // 'data-show-on' => $pushDeal,
                         ],
                         'required' => false,
                     ]
